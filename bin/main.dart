@@ -1,58 +1,102 @@
 void main() {
-  final dino = Animal(weight: 10000, name: "Птеродактиль");
-  dino.out();
-  final dog = Dog(weight: 10, breed: 'чихуахуа', name: "Дмитрий");
-  final cat = Cat(weight: 10, name: "Дмитрий", type: KotKakoy.polosatiy);
-  dog.out();
-  cat.out();
+  final dog = Gamer(
+    name: 'Dog',
+    games: [
+      Game(date: DateTime(2020), place: 1),
+      Game(date: DateTime(2021), place: 1),
+      Game(date: DateTime(2022), place: 4),
+    ],
+    technique: Technique.hyperTapping,
+  );
+
+  final chrisTang =
+  Commentator(name: 'Chris Tang', favoritePhrase: 'Boom Tetris For [Name]');
+
+  print(dog.aboutMe());
+  print(chrisTang.aboutMe());
 }
 
-class Animal {
-  Animal({
-    required this.weight,
-    required this.name,
-  });
-  final double weight;
+/// Максимально общая сущность.
+abstract class Human {
+  /// Имя.
   final String name;
 
-  void out() => print("Вес:$weight, Имя:$name");
+  /// Конструктор.
+  Human({
+    required this.name,
+  });
 }
 
-class Dog extends Animal {
-  final String breed;
-  Dog({
-    required super.weight,
-    required this.breed,
+/// Разновидность: геймер.
+class Gamer extends Human {
+  /// Игры.
+  final List<Game> games;
+
+  /// Техника.
+  final Technique technique;
+
+  /// Конструктор.
+  Gamer({
     required super.name,
+    required this.games,
+    required this.technique,
   });
 
-  @override
-  void out() => print("Вес:$weight, Имя:$name, Порода: $breed");
-}
-
-class Cat extends Animal {
-  final KotKakoy type;
-  Cat({
-    required super.weight,
-    required super.name,
-    required this.type,
-  });
-
-  @override
-  void out() => print("Вес:$weight, Имя:$name, Порода: ${_prepareEnum()}");
-
-  String _prepareEnum() {
-    late final label;
-    switch (type) {
-      case KotKakoy.polosatiy:
-        label = "Полосатый";
-      case KotKakoy.volosatiy:
-        label = "Волосатый";
-      case KotKakoy.lisiy:
-        label = "Лысый";
-    }
-    return label;
+  /// Метод вывода информации.
+  String aboutMe() {
+    return 'My name is $name. '
+        'I played ${games.length} games for now. '
+        'My favorite technique is $technique. ';
   }
 }
 
-enum KotKakoy { polosatiy, volosatiy, lisiy }
+/// Информация об игре.
+class Game {
+  /// Год.
+  final DateTime date;
+
+  /// Занятое место.
+  final int place;
+
+  Game({
+    required this.date,
+    required this.place,
+  });
+}
+
+/// Техники.
+enum Technique {
+  regular,
+  hyperTapping,
+  rolling;
+
+  @override
+  String toString() {
+    switch (this) {
+      case Technique.regular:
+        return 'regular';
+      case Technique.hyperTapping:
+        return 'hyper tapping';
+      case Technique.rolling:
+        return 'rolling';
+    }
+  }
+}
+
+/// Разновидность: комментатор.
+class Commentator extends Human {
+  /// Стиль.
+  final String favoritePhrase;
+
+  /// Конструктор.
+  Commentator({
+    required super.name,
+    required this.favoritePhrase,
+  });
+
+  /// Метод вывода информации.
+  String aboutMe() {
+    return 'My name is $name. '
+        'I like to say $favoritePhrase. ';
+  }
+}
